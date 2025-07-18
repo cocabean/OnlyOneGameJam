@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public float EyeHeight = 1f;
 
     private CharacterController controller;
-    public Camera playerCam;
+    public GameObject cameras;
     public GameObject body;
 
     private Vector3 velocity;
@@ -59,9 +59,9 @@ public class PlayerController : MonoBehaviour
         center.y = StandingHeight * 0.5f;
         controller.center = center;
 
-        Vector3 cameraPos = playerCam.transform.localPosition;
-        cameraPos.y = EyeHeight;
-        playerCam.transform.localPosition = cameraPos;
+        Vector3 cameraPos = cameras.transform.localPosition;
+        cameras.y = EyeHeight;
+        cameras.transform.localPosition = cameras;
 
         originalCameraY = EyeHeight;
         targetCameraY = originalCameraY;
@@ -95,7 +95,7 @@ public class PlayerController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y") * MouseSensitivity;
         verticalRotation -= mouseY;
         verticalRotation = Mathf.Clamp(verticalRotation, -MaxLookAngle, MaxLookAngle);
-        playerCam.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+        cameras.transform.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
     }
 
     private void HandleMovement()
@@ -153,12 +153,12 @@ public class PlayerController : MonoBehaviour
         }
 
         // Smoothhhhh
-        float newCameraY = Mathf.Lerp(playerCam.transform.localPosition.y, targetCameraY,
+        float newCameraY = Mathf.Lerp(cameras.transform.localPosition.y, targetCameraY,
                                      CrouchTransitionSpeed * Time.deltaTime);
-        playerCam.transform.localPosition = new Vector3(
-            playerCam.transform.localPosition.x,
+        cameras.transform.localPosition = new Vector3(
+            cameras.transform.localPosition.x,
             newCameraY,
-            playerCam.transform.localPosition.z);
+            cameras.transform.localPosition.z);
     }
     private void StartCrouch()
     {
