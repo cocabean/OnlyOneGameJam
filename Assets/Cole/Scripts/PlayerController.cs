@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
     public float EyeHeight = 1f;
 
     private CharacterController controller;
-    private Camera playerCam;
+    public Camera playerCam;
     public GameObject body;
 
     private Vector3 velocity;
@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         controller = GetComponent<CharacterController>();
-        playerCam = GetComponentInChildren<Camera>();
+        //playerCam = GetComponentInChildren<Camera>();
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

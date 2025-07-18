@@ -362,6 +362,7 @@ MonoBehaviour:
   CrouchHeight: 1.3
   CrouchTransitionSpeed: 8
   EyeHeight: 1
+  playerCam: {fileID: 318644734964739633}
   body: {fileID: 3092779153951809568}
 --- !u!1 &8014834385418842391
 GameObject:
