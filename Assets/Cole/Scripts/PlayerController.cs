@@ -60,8 +60,8 @@ public class PlayerController : MonoBehaviour
         controller.center = center;
 
         Vector3 cameraPos = cameras.transform.localPosition;
-        cameras.y = EyeHeight;
-        cameras.transform.localPosition = cameras;
+        cameraPos.y = EyeHeight;
+        cameras.transform.localPosition = cameraPos;
 
         originalCameraY = EyeHeight;
         targetCameraY = originalCameraY;
