@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,16 +9,23 @@ public class Flashlight : MonoBehaviour
     public GameObject redCam;
     public GameObject magentaCam;
     public GameObject blueCam;
+
+    [Header("Colors")]
+    public Light light;
+
+    public Color red;
+    public Color magenta;
+    public Color blue;
     public enum Colors
     {
         Red,
-        Pink,
+        Magenta,
         Blue,
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        light.color = red;
     }
 
     // Update is called once per frame
@@ -35,7 +43,7 @@ public class Flashlight : MonoBehaviour
                 magentaCam.SetActive(false);
                 blueCam.SetActive(true);
                 break;
-            case Colors.Pink:
+            case Colors.Magenta:
                 redCam.SetActive(false);
                 magentaCam.SetActive(true);
                 blueCam.SetActive(false);
@@ -43,5 +51,38 @@ public class Flashlight : MonoBehaviour
             default:
                 break;
         }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            setRed();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            setMagenta();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            setBlue();
+        }
     }
+    public void setRed()
+    {
+        colors = Colors.Red;
+        light.color = red;
+    }
+
+    public void setMagenta()
+    {
+        colors = Colors.Magenta;
+        light.color = magenta;
+    }
+
+    public void setBlue()
+    {
+        colors = Colors.Blue;
+        light.color = blue;
+    }
+
 }
