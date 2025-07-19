@@ -3,6 +3,13 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Colors
+{
+    Red,
+    Magenta,
+    Blue,
+}
+
 public class Flashlight : MonoBehaviour
 {
     public Colors colors;
@@ -16,12 +23,7 @@ public class Flashlight : MonoBehaviour
     public Color red;
     public Color magenta;
     public Color blue;
-    public enum Colors
-    {
-        Red,
-        Magenta,
-        Blue,
-    }
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
