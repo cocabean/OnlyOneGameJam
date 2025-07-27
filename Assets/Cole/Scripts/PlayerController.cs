@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour
     private float originalCameraY;
     private float targetCameraY;
 
+    public bool holdingObject;
+    public bool movementEnabled = true;
+    public bool hiding = false;
 
     private void Start()
     {
@@ -77,14 +80,17 @@ public class PlayerController : MonoBehaviour
 
     private void HandleInput()
     {
-        // movementtttt
-        horizontal = Input.GetAxis("Horizontal");
-        vertical = Input.GetAxis("Vertical");
+        if (movementEnabled)
+        {
+            // movementtttt
+            horizontal = Input.GetAxis("Horizontal");
+            vertical = Input.GetAxis("Vertical");
 
-        // actions
-        jumpInput = Input.GetButtonDown("Jump");
-        crouchInput = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.C);
-        sprintInput = Input.GetKey(KeyCode.LeftShift) && !isCrouching;
+            // actions
+            jumpInput = Input.GetButtonDown("Jump");
+            crouchInput = Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.C);
+            sprintInput = Input.GetKey(KeyCode.LeftShift) && !isCrouching;
+        }
     }
 
     private void HandleMouseInput()
@@ -100,65 +106,71 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        isGrounded = controller.isGrounded;
-
-        if (isGrounded && velocity.y < 0)
+        if (movementEnabled)
         {
-            velocity.y = -2f; // keep grounded
-        }
+            isGrounded = controller.isGrounded;
 
-        // calc move dir (calc short for calculate)
-        Vector3 move = transform.right * horizontal + transform.forward * vertical;
+            if (isGrounded && velocity.y < 0)
+            {
+                velocity.y = -2f; // keep grounded
+            }
 
-        float currentSpeed = WalkSpeed;
+            // calc move dir (calc short for calculate)
+            Vector3 move = transform.right * horizontal + transform.forward * vertical;
 
-        if (isCrouching)
-        {
-            currentSpeed = CrouchSpeed;
-            isSprinting = false;
-        }
-        else if (sprintInput && currentStamina > 0 && move.magnitude > 0.1f)
-        {
-            currentSpeed = SprintSpeed;
-            isSprinting = true;
-        }
-        else
-        {
-            isSprinting = false;
-        }
+            float currentSpeed = WalkSpeed;
 
-        controller.Move(move * currentSpeed * Time.deltaTime);
+            if (isCrouching)
+            {
+                currentSpeed = CrouchSpeed;
+                isSprinting = false;
+            }
+            else if (sprintInput && currentStamina > 0 && move.magnitude > 0.1f)
+            {
+                currentSpeed = SprintSpeed;
+                isSprinting = true;
+            }
+            else
+            {
+                isSprinting = false;
+            }
 
-        if (jumpInput && isGrounded && !isCrouching)
-        {
-            velocity.y = Mathf.Sqrt(JumpHeight * -2f * g);
-        }
+            controller.Move(move * currentSpeed * Time.deltaTime);
 
-        velocity.y += g * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+            if (jumpInput && isGrounded && !isCrouching && !holdingObject)
+            {
+                velocity.y = Mathf.Sqrt(JumpHeight * -2f * g);
+            }
+
+            velocity.y += g * Time.deltaTime;
+            controller.Move(velocity * Time.deltaTime);
+        }  
     }
 
     void HandleCrouch()
     {
-        if (crouchInput && !isCrouching)
+        if (movementEnabled)
         {
-            StartCrouch();
-        }
-        else if (!crouchInput && isCrouching)
-        {
-            if (CanStandUp())
+            if (crouchInput && !isCrouching)
             {
-                StopCrouch();
+                StartCrouch();
             }
-        }
+            else if (!crouchInput && isCrouching)
+            {
+                if (CanStandUp())
+                {
+                    StopCrouch();
+                }
+            }
 
-        // Smoothhhhh
-        float newCameraY = Mathf.Lerp(cameras.transform.localPosition.y, targetCameraY,
-                                     CrouchTransitionSpeed * Time.deltaTime);
-        cameras.transform.localPosition = new Vector3(
-            cameras.transform.localPosition.x,
-            newCameraY,
-            cameras.transform.localPosition.z);
+            // Smoothhhhh
+            float newCameraY = Mathf.Lerp(cameras.transform.localPosition.y, targetCameraY,
+                                         CrouchTransitionSpeed * Time.deltaTime);
+            cameras.transform.localPosition = new Vector3(
+                cameras.transform.localPosition.x,
+                newCameraY,
+                cameras.transform.localPosition.z);
+        }
     }
     private void StartCrouch()
     {

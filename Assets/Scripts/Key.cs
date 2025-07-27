@@ -28,10 +28,10 @@ public class Key : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("Player"))
+        if(other.CompareTag("Player") && color == flashlight.colors)
         {
             interactText.text = "press [E] to pick up";
-            if (Input.GetKey(KeyCode.E) && color == flashlight.colors)
+            if (Input.GetKey(KeyCode.E))
             {
                 interactText.text = "";
                 inventory.itemInHand = gameObject;
